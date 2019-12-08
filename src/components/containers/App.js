@@ -1,7 +1,7 @@
 import React from "react";
 import Player from "./Player";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import GlobalStyle from "../../styles/GlobalStyle";
+import GlobalStyle from "../styles/GlobalStyle";
 
 const App = () => (
   <BrowserRouter>
