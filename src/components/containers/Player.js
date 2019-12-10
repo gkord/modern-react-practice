@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Video from "../Video";
 import { ThemeProvider } from "styled-components";
 import Playlist from "./Playlist";
@@ -25,6 +25,16 @@ const themeLight = {
 };
 
 const Player = props => {
+  const videos = JSON.parse(document.querySelector('[name="videos"]').value);
+
+  const [state, setstate] = useState({
+      videos: videos.playlist,
+      activeVideo: videos.playlist[0],
+      nightMode: true,
+      playlistId: videos.playlistId,
+      autoplay: false
+  })
+
   const nightModeCallback = () => {};
 
   const endCallback = () => {};
@@ -35,17 +45,17 @@ const Player = props => {
     <ThemeProvider theme={state.nightMode ? theme : themeLight}>
       {state.videos !== null ? (
         <StyledPlayer>
-          <Video 
-          active={state.activeVideo}
-          autoplay={state.autoplay}
-          endCallback={endCallback}
-          progressCallback={progressCallback}
+          <Video
+            active={state.activeVideo}
+            autoplay={state.autoplay}
+            endCallback={endCallback}
+            progressCallback={progressCallback}
           />
           <Playlist
-          videos={state.videos}
-          active={state.activeVideo}
-          nightModeCallback={nightModeCallback}
-          nightMode={state.nightMode}
+            videos={state.videos}
+            active={state.activeVideo}
+            nightModeCallback={nightModeCallback}
+            nightMode={state.nightMode}
           />
         </StyledPlayer>
       ) : null}
