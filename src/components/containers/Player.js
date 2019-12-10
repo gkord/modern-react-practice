@@ -47,12 +47,11 @@ const Player = ({ match, history, location }) => {
         activeVideo: prevState.videos[newActiveVideo],
         autoplay: location.autoplay
       }));
-    } else {
+    } else
       history.push({
         pathname: `/${state.activeVideo.id}`,
         autoplay: false
       });
-    }
   }, [
     history,
     location.autoplay,
@@ -61,11 +60,47 @@ const Player = ({ match, history, location }) => {
     state.videos
   ]);
 
-  const nightModeCallback = () => {};
+  const nightModeCallback = () => {
+    setState(prevState => ({
+      ...prevState,
+      nightMode: !prevState.nightMode
+    }));
+  };
 
-  const endCallback = () => {};
+  const endCallback = () => {
+    const videoId = match.params.activeVideo;
+    const currentVideoIndex = state.videos.findIndex(
+      video => video.id === videoId
+    );
 
-  const progressCallback = () => {};
+    const nextVideo =
+      currentVideoIndex === state.videos.length - 1 ? 0 : currentVideoIndex + 1;
+
+      history.push({
+          pathname:`${state.videos[nextVideo].id}`
+      })
+  };
+
+  const progressCallback = e => {
+    if (e.playedSeconds > 10 && e.playedSeconds < 11) {
+      const videos = [...state.videos];
+      const playedVideo = videos.find(
+        video => video.id === state.activeVideo.id
+      );
+      playedVideo.played = true;
+
+      setState(prevState => ({ ...prevState, videos }));
+
+      // setState({
+      //   ...state,
+      //   videos: state.videos.map( element => {
+      //     return element.id === state.activeVideo.id
+      //     ? { ...element, played: true }
+      //     : element;
+      //   })
+      // });
+    }
+  };
 
   return (
     <ThemeProvider theme={state.nightMode ? theme : themeLight}>
